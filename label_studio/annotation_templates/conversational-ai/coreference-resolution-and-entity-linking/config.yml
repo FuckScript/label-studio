@@ -1,4 +1,4 @@
-title: Coreference Resolution & Entity Linking
+title: 共同引用解析和实体链接
 type: community
 group: Conversational AI
 image: /static/templates/coreference-resolution-and-entity-linking.png
@@ -12,4 +12,3 @@ config: |
 
     <Text name="text" value="$corefText"/>
   </View>
-

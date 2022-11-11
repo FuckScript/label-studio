@@ -7,12 +7,21 @@ import { cn } from '../../../utils/bem';
 import './Config.styl';
 import { IconInfo } from '../../../assets/icons';
 
-
+const groupsMap = {
+  'Computer Vision': '计算机视觉',
+  'Natural Language Processing': '自然语言处理',
+  'Audio/Speech Processing': '音频 / 台词处理',
+  'Conversational AI': 'AI会话',
+  'Ranking & Scoring': '得分与排序',
+  'Structured Data Parsing': '结构化数据分析',
+  'Time Series Analysis': '事件序列分析',
+  'Videos': '视频',
+}
 const listClass = cn("templates-list");
 
 const Arrow = () => (
   <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path opacity="0.9" d="M2 10L6 6L2 2" stroke="currentColor" strokeWidth="2" strokeLinecap="square"/>
+    <path opacity="0.9" d="M2 10L6 6L2 2" stroke="currentColor" strokeWidth="2" strokeLinecap="square" />
   </svg>
 );
 
@@ -65,12 +74,12 @@ export const TemplatesList = ({ selectedGroup, selectedRecipe, onCustomTemplate,
                 selected: selectedRecipe?.group === group,
               })}
             >
-              {group}
+              {groupsMap[group]}
               <Arrow />
             </li>
           ))}
         </ul>
-        <button type="button" onClick={onCustomTemplate} className={listClass.elem("custom-template")}>Custom template</button>
+        <button type="button" onClick={onCustomTemplate} className={listClass.elem("custom-template")}>自定义模板</button>
       </aside>
       <main>
         {!templates && <Spinner style={{ width: "100%", height: 200 }} />}
@@ -78,7 +87,7 @@ export const TemplatesList = ({ selectedGroup, selectedRecipe, onCustomTemplate,
       </main>
       <footer>
         <IconInfo className={listClass.elem("info-icon")} width="20" height="20" />
-        See the documentation to <a href="https://labelstud.io/guide" target="_blank">contribute a template</a>.
+        请参阅相关文档 <a href="https://labelstud.io/guide" target="_blank">提供一个模板</a>.
       </footer>
     </div>
   );

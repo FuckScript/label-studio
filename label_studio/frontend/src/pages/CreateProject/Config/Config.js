@@ -1,10 +1,9 @@
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/xml/xml';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 import { Button, ToggleItems } from '../../../components';
 import { Form } from '../../../components/Form';
-import { Oneof } from '../../../components/Oneof/Oneof';
 import { cn } from '../../../utils/bem';
 import { Palette } from '../../../utils/colors';
 import { colorNames } from './colors';
@@ -45,10 +44,10 @@ const configClass = cn("configure");
 
 const EmptyConfigPlaceholder = () => (
   <div className={configClass.elem("empty-config")}>
-    <p>Your labeling configuration is empty. It is required to label your data.</p>
+    <p>您的标注配置为空。它需要标记您的数据。</p>
     <p>
-      Start from one of our predefined templates or create your own config on the Code panel.
-      The labeling config is XML-based and you can <a href="https://labelstud.io/tags/" target="_blank">read about the available tags in our documentation</a>.
+      从我们预定义的模板开始，或者在代码面板上创建自己的配置。
+      标签配置是基于xml的，您可以这样做 <a href="https://labelstud.io/tags/" target="_blank">阅读我们的文档中可用的标签</a>.
     </p>
   </div>
 );
@@ -69,8 +68,8 @@ const Label = ({ label, template, color }) => {
       <span>{value}</span>
       <button type="button" className={configClass.elem("delete-label")} onClick={() => template.removeLabel(label)}>
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="red" strokeWidth="2" strokeLinecap="square" xmlns="http://www.w3.org/2000/svg">
-          <path d="M2 12L12 2"/>
-          <path d="M12 12L2 2"/>
+          <path d="M2 12L12 2" />
+          <path d="M12 12L2 2" />
         </svg>
       </button>
     </li>
@@ -99,12 +98,12 @@ const ConfigureControl = ({ control, template }) => {
   return (
     <div className={configClass.elem("labels")}>
       <form className={configClass.elem("add-labels")} action="">
-        <h4>{tagname === "Choices" ? "Add choices" : "Add label names"}</h4>
+        <h4>{tagname === "Choices" ? "添加选项" : "添加标签名称"}</h4>
         <textarea name="labels" id="" cols="30" rows="5" ref={refLabels} onKeyPress={onKeyPress}></textarea>
-        <input type="button" value="Add" onClick={onAddLabels} />
+        <input type="button" value="添加" onClick={onAddLabels} />
       </form>
       <div className={configClass.elem("current-labels")}>
-        <h3>{tagname === "Choices" ? "Choices" : "Labels"} ({control.children.length})</h3>
+        <h3>{tagname === "Choices" ? "选择" : "标签"} ({control.children.length})</h3>
         <ul>
           {Array.from(control.children).map(label => (
             <Label
@@ -193,66 +192,126 @@ const ConfigureSettings = ({ template }) => {
   return (
     <ul className={configClass.elem("settings")}>
       <li>
-        <h4>Configure settings</h4>
+        <h4>配置设置</h4>
         <ul className={configClass.elem("object-settings")}>
-          {items}
+          {/* 配置设置只保留第一个 */}
+          {items.filter(i => i.key === 'granularity')}
         </ul>
       </li>
     </ul>
   );
 };
 
-const ConfigureColumns = ({ columns, template }) => {
-  const updateValue = obj => e => {
-    const attrName = e.target.value.replace(/^\$/, "");
+// configure value source for `obj` object tag
+const ConfigureColumn = ({ template, obj, columns }) => {
+  const value = obj.getAttribute("value")?.replace(/^\$/, "");
+  // if there is a value set already and it's not in the columns
+  // or data was not uploaded yet
+  const [isManual, setIsManual] = useState(!!value && !columns?.includes(value));
+  // value is stored in state to make input conrollable
+  // changes will be sent by Enter and blur
+  const [newValue, setNewValue] = useState("$" + value);
 
-    obj.setAttribute("value", "$" + attrName);
+  // update local state when external value changes
+  useEffect(() => setNewValue("$" + value), [value]);
+
+  const updateValue = value => {
+    const newValue = value.replace(/^\$/, "");
+
+    obj.setAttribute("value", "$" + newValue);
     template.render();
   };
 
+  const selectValue = e => {
+    const value = e.target.value;
+
+    if (value === "-") {
+      setIsManual(true);
+      return;
+    } else if (isManual) {
+      setIsManual(false);
+    }
+
+    updateValue(value);
+  };
+
+  const handleChange = e => {
+    const newValue = e.target.value.replace(/^\$/, "");
+
+    setNewValue("$" + newValue);
+  };
+
+  const handleBlur = () => {
+    updateValue(newValue);
+  };
+
+  const handleKeyDown = e => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      updateValue(e.target.value);
+    }
+  };
+
+  return (
+    <p>
+      Use {obj.tagName.toLowerCase()}
+      {template.objects > 1 && ` for ${obj.getAttribute("name")}`}
+      {" from "}
+      {columns?.length > 0 && columns[0] !== DEFAULT_COLUMN && "field "}
+      <select onChange={selectValue} value={isManual ? "-" : value}>
+        {columns?.map(column => (
+          <option key={column} value={column}>
+            {column === DEFAULT_COLUMN ? "<imported file>" : `$${column}`}
+          </option>
+        ))}
+        {!columns?.length && (
+          <option value={value}>{"<导入文件>"}</option>
+        )}
+        <option value="-">{"<手动设置>"}</option>
+      </select>
+      {isManual && (
+        <input value={newValue} onChange={handleChange} onBlur={handleBlur} onKeyDown={handleKeyDown} />
+      )}
+    </p>
+  );
+};
+
+const ConfigureColumns = ({ columns, template }) => {
   if (!template.objects.length) return null;
 
   return (
     <div className={configClass.elem("object")}>
-      <h4>Configure data</h4>
+      <h4>配置数据</h4>
       {template.objects.length > 1 && columns?.length > 0 && columns.length < template.objects.length && (
-        <p className={configClass.elem("object-error")}>This template requires more data then you have for now</p>
+        <p className={configClass.elem("object-error")}>这个模板需要比现在更多的数据</p>
       )}
       {columns?.length === 0 && (
         <p className={configClass.elem("object-error")}>
-          To select which field(s) to label you need to upload the data. Alternatively, you can provide it using Code mode.
+          要选择要标记的字段，您需要上传数据。或者，您可以使用代码模式提供它。
         </p>
       )}
       {template.objects.map(obj => (
-        <p key={obj.getAttribute("name")}>
-          Use {obj.tagName.toLowerCase()}
-          {template.objects > 1 && ` for ${obj.getAttribute("name")}`}
-          {" from "}
-          {columns?.length > 0 && columns[0] !== DEFAULT_COLUMN && "field "}
-          <select onChange={updateValue(obj)} value={obj.getAttribute("value")?.replace(/^\$/, "")}>
-            {columns?.map(column => (
-              <option key={column} value={column}>
-                {column === DEFAULT_COLUMN ? "<imported file>" : `$${column}`}
-              </option>
-            ))}
-            {!columns?.length && (
-              <option value={obj.getAttribute("value")?.replace(/^\$/, "")}>{"<imported file>"}</option>
-            )}
-          </select>
-        </p>
+        <ConfigureColumn key={obj.getAttribute("name")} {...{ obj, template, columns }} />
       ))}
     </div>
   );
 };
 
-const Configurator = ({ columns, config, project, template, setTemplate, onBrowse, onSaveClick, onValidate, disableSaveButton }) => {
+const Configurator = ({ columns, config, project, template, setTemplate, onBrowse, onSaveClick, onValidate, disableSaveButton, warning }) => {
   const [configure, setConfigure] = React.useState(isEmptyConfig(config) ? "code" : "visual");
   const [visualLoaded, loadVisual] = React.useState(configure === "visual");
   const [waiting, setWaiting] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState();
+
+  // config update is debounced because of user input
   const [configToCheck, setConfigToCheck] = React.useState();
+  // then we wait for validation and sample data for this config
+  const [error, setError] = React.useState();
+  const [parserError, setParserError] = React.useState();
   const [data, setData] = React.useState();
+  const [loading, setLoading] = useState(false);
+  // and only with them we'll update config in preview
+  const [configToDisplay, setConfigToDisplay] = React.useState(config);
+
   const debounceTimer = React.useRef();
   const api = useAPI();
 
@@ -291,6 +350,7 @@ const Configurator = ({ columns, config, project, template, setTemplate, onBrows
     setLoading(false);
     if (sample && !sample.error) {
       setData(sample.sample_task);
+      setConfigToDisplay(configToCheck);
     } else {
       // @todo validation can be done in this place,
       // @todo but for now it's extremely slow in /sample-task endpoint
@@ -298,7 +358,6 @@ const Configurator = ({ columns, config, project, template, setTemplate, onBrows
     }
   }, [configToCheck]);
 
-  React.useEffect(() => { setError(null); }, [template, config]);
 
   // code should be reloaded on every render because of uncontrolled codemirror
   // visuals should be always rendered after first render
@@ -308,12 +367,25 @@ const Configurator = ({ columns, config, project, template, setTemplate, onBrows
     if (value === "visual") loadVisual(true);
   };
 
+  const onChange = React.useCallback((config) => {
+    try {
+      setParserError(null);
+      setTemplate(config);
+    } catch (e) {
+      setParserError({
+        detail: `Parser error`,
+        validation_errors: [e.message],
+      });
+    }
+  }, [setTemplate]);
+
   const onSave = async () => {
     setError(null);
     setWaiting(true);
     const res = await onSaveClick();
 
     setWaiting(false);
+
     if (res !== true) {
       setError(res);
     }
@@ -321,9 +393,9 @@ const Configurator = ({ columns, config, project, template, setTemplate, onBrows
 
   const extra = (
     <p className={configClass.elem('tags-link')}>
-      Configure the labeling interface with tags.
-      <br/>
-      <a href="https://labelstud.io/tags/" target="_blank">See all available tags</a>
+      配置标签接口.
+      <br />
+      <a href="https://labelstud.io/tags/" target="_blank">查看所有可用的标签</a>
       .
     </p>
   );
@@ -332,8 +404,8 @@ const Configurator = ({ columns, config, project, template, setTemplate, onBrows
     <div className={configClass}>
       <div className={configClass.elem("container")}>
         <header>
-          <button onClick={onBrowse}>Browse Templates</button>
-          <ToggleItems items={{ code: "Code", visual: "Visual" }} active={configure} onSelect={onSelect} />
+          <button onClick={onBrowse}>选择模板</button>
+          <ToggleItems items={{ code: "代码", visual: "图形" }} active={configure} onSelect={onSelect} />
         </header>
         <div className={configClass.elem('editor')}>
           {configure === "code" && (
@@ -344,7 +416,7 @@ const Configurator = ({ columns, config, project, template, setTemplate, onBrows
                 value={formatXML(config)}
                 detach
                 options={{ mode: "xml", theme: "default", lineNumbers: true }}
-                onChange={(editor, data, value) => setTemplate(value)}
+                onChange={(editor, data, value) => onChange(value)}
               />
             </div>
           )}
@@ -360,17 +432,26 @@ const Configurator = ({ columns, config, project, template, setTemplate, onBrows
         {disableSaveButton !== true && onSaveClick && (
           <Form.Actions size="small" extra={configure === "code" && extra} valid>
             <Button look="primary" size="compact" style={{ width: 120 }} onClick={onSave} waiting={waiting}>
-              Save
+              {waiting ? "保存中..." : "保存"}
             </Button>
           </Form.Actions>
         )}
       </div>
-      <Preview config={config} data={data} error={error} loading={loading} />
+      <Preview config={configToDisplay} data={data} loading={loading} error={parserError || error || (configure === "code" && warning)} />
     </div>
   );
 };
 
-export const ConfigPage = ({ config: initialConfig = "", columns: externalColumns, project, onUpdate, onSaveClick, onValidate, disableSaveButton, show = true }) => {
+export const ConfigPage = ({
+  config: initialConfig = "",
+  columns: externalColumns,
+  project,
+  onUpdate,
+  onSaveClick,
+  onValidate,
+  disableSaveButton,
+  show = true,
+}) => {
   const [config, _setConfig] = React.useState("");
   const [mode, setMode] = React.useState("list"); // view | list
   const [selectedGroup, setSelectedGroup] = React.useState(null);
@@ -395,7 +476,10 @@ export const ConfigPage = ({ config: initialConfig = "", columns: externalColumn
 
   React.useEffect(() => { if (externalColumns?.length) setColumns(externalColumns); }, [externalColumns]);
 
+  const [warning, setWarning] = React.useState();
+
   React.useEffect(async () => {
+    if (externalColumns) return; // we are in Create Project dialog, so this request is useless
     if (!project || columns) return;
     const res = await api.callApi("dataSummary", {
       params: { pk: project.id },
@@ -407,12 +491,6 @@ export const ConfigPage = ({ config: initialConfig = "", columns: externalColumn
       setColumns(res.common_data_columns);
     }
   }, [columns, project]);
-
-  React.useEffect(() => {
-    if (columns?.length && template) {
-      template.fixColumns(columns);
-    }
-  }, [columns, template]);
 
   const onSelectRecipe = React.useCallback(recipe => {
     if (!recipe) {
@@ -441,7 +519,7 @@ export const ConfigPage = ({ config: initialConfig = "", columns: externalColumn
 
   return (
     <div className={wizardClass} data-mode="list" id="config-wizard">
-      <Oneof value={mode}>
+      {mode === "list" && (
         <TemplatesList
           case="list"
           selectedGroup={selectedGroup}
@@ -450,6 +528,8 @@ export const ConfigPage = ({ config: initialConfig = "", columns: externalColumn
           onSelectRecipe={onSelectRecipe}
           onCustomTemplate={onCustomTemplate}
         />
+      )}
+      {mode === "view" && (
         <Configurator
           case="view"
           columns={columns}
@@ -462,8 +542,9 @@ export const ConfigPage = ({ config: initialConfig = "", columns: externalColumn
           onValidate={onValidate}
           disableSaveButton={disableSaveButton}
           onSaveClick={onSaveClick}
+          warning={warning}
         />
-      </Oneof>
+      )}
     </div>
   );
 };

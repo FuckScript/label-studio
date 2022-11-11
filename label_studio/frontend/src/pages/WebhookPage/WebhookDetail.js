@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '../../components';
 import { Form, Label, Input, Toggle } from '../../components/Form';
 import { Elem, Block, cn } from '../../utils/bem';
@@ -20,7 +20,7 @@ const WebhookDetail = ({ webhook, webhooksInfo, fetchWebhooks, onBack, onSelectA
   // else update
   const rootClass = cn('webhook-detail');
 
-  const api = useAPI(); 
+  const api = useAPI();
   const [headers, setHeaders] = useState(Object.entries(webhook?.headers || []));
   const [sendForAllActions, setSendForAllActions] = useState(webhook ? webhook.send_for_all_actions : true);
   const [actions, setActions] = useState(new Set(webhook?.actions));
@@ -28,13 +28,13 @@ const WebhookDetail = ({ webhook, webhooksInfo, fetchWebhooks, onBack, onSelectA
   const [sendPayload, setSendPayload] = useState(webhook ? webhook.send_payload : true);
 
   const { project } = useProject();
-  
+
   const [projectId, setProjectId] = useState(project.id);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (Object.keys(project).length === 0) {
       setProjectId(null);
-    }else{
+    } else {
       setProjectId(project.id);
     }
 
@@ -85,28 +85,28 @@ const WebhookDetail = ({ webhook, webhooksInfo, fetchWebhooks, onBack, onSelectA
     setSendPayload(webhook.send_payload);
   }, [webhook]);
 
-  if (projectId===undefined) return <></>;
+  if (projectId === undefined) return <></>;
   return <Block name='webhook'>
     <Elem name='title'>
-      <><Elem 
-        tag='span' 
+      <><Elem
+        tag='span'
         name='title-base'
-        onClick={()=>{onSelectActive(null);}}
-      >Webhooks
-      </Elem>  /  {webhook===null? 'New Webhook' : 'Edit Webhook'}</>
+        onClick={() => { onSelectActive(null); }}
+      >回调
+      </Elem>  /  {webhook === null ? '新回调' : '编辑回调'}</>
     </Elem>
     <Elem name='content'>
       <Block name={'webhook-detail'}>
         <Form
-          action={webhook===null ? 'createWebhook' :  'updateWebhook'}
-          params={webhook===null ? {} : { pk: webhook.id }}
+          action={webhook === null ? 'createWebhook' : 'updateWebhook'}
+          params={webhook === null ? {} : { pk: webhook.id }}
           formData={webhook}
           prepareData={(data) => {
             return {
               ...data,
               'project': projectId,
               'send_for_all_actions': sendForAllActions,
-              'headers': Object.fromEntries(headers.filter(([key])=>key!== '')),
+              'headers': Object.fromEntries(headers.filter(([key]) => key !== '')),
               'actions': Array.from(actions),
               'is_active': isActive,
               'send_payload': sendPayload,
@@ -119,34 +119,34 @@ const WebhookDetail = ({ webhook, webhooksInfo, fetchWebhooks, onBack, onSelectA
             }
           }}
         >
-          <Form.Row 
-            style={{marginBottom: '40px'}}
+          <Form.Row
+            style={{ marginBottom: '40px' }}
             columnCount={1}
           >
-            <Label text='Payload URL' style={{marginLeft: '-16px'}} large></Label>
+            <Label text='有效载荷的URL' style={{ marginLeft: '-16px' }} large></Label>
             <Space className={rootClass.elem('url-space')}>
-              <Input 
-                name="url" 
-                className={rootClass.elem('url-input')} 
+              <Input
+                name="url"
+                className={rootClass.elem('url-input')}
                 placeholder="URL" />
               <Space align='end' className={rootClass.elem('activator')}>
-                <span className={rootClass.elem('black-text')}>Is Active</span>
-                <Toggle 
+                <span className={rootClass.elem('black-text')}>是否激活</span>
+                <Toggle
                   skip
-                  checked={isActive} 
-                  onChange={(e) => { setIsActive(e.target.checked); }} 
+                  checked={isActive}
+                  onChange={(e) => { setIsActive(e.target.checked); }}
                 />
               </Space>
             </Space>
           </Form.Row>
-          <Form.Row style={{marginBottom: '40px'}} columnCount={1}>
+          <Form.Row style={{ marginBottom: '40px' }} columnCount={1}>
             <div className={rootClass.elem('headers')}>
               <div className={rootClass.elem('headers-content')}>
                 <Space spread className={rootClass.elem('headers-control')}>
                   <Label text="Headers" large />
-                  <Button 
-                    type='button' 
-                    onClick={onAddHeaderClick} 
+                  <Button
+                    type='button'
+                    onClick={onAddHeaderClick}
                     className={rootClass.elem('headers-add')}
                     icon={<LsPlus />}
                   />
@@ -154,20 +154,20 @@ const WebhookDetail = ({ webhook, webhooksInfo, fetchWebhooks, onBack, onSelectA
                 {
                   headers.map(([headKey, headValue], index) => {
                     return <Space key={index} className={rootClass.elem('headers-row')} columnCount={3} >
-                      <Input className={rootClass.elem('headers-input')} 
-                        skip 
-                        placeholder="header" 
-                        value={headKey} 
+                      <Input className={rootClass.elem('headers-input')}
+                        skip
+                        placeholder="header"
+                        value={headKey}
                         onChange={(e) => onHeaderChange('key', e, index)} />
-                      <Input className={rootClass.elem('headers-input')} 
-                        skip 
+                      <Input className={rootClass.elem('headers-input')}
+                        skip
                         placeholder="value"
-                        value={headValue} 
+                        value={headValue}
                         onChange={(e) => onHeaderChange('value', e, index)} />
                       <div>
-                        <Button className={rootClass.elem('headers-remove')} 
-                          type='button' 
-                          icon={<LsCross />} 
+                        <Button className={rootClass.elem('headers-remove')}
+                          type='button'
+                          icon={<LsCross />}
                           onClick={() => onHeaderRemove(index)}></Button>
                       </div>
                     </Space>;
@@ -176,43 +176,43 @@ const WebhookDetail = ({ webhook, webhooksInfo, fetchWebhooks, onBack, onSelectA
               </div>
             </div>
           </Form.Row>
-          <Block name='webhook-payload' style={{marginBottom: '40px'}}>
+          <Block name='webhook-payload' style={{ marginBottom: '40px' }}>
             <Elem name='title'>
-              <Label text="Payload" large />
+              <Label text="载荷" large />
             </Elem>
             <Elem name='content'>
               <Elem name='content-row'>
-                <Toggle 
+                <Toggle
                   skip
                   checked={sendPayload}
                   onChange={(e) => { setSendPayload(e.target.checked); }}
-                  label="Send payload" />
+                  label="发送有效载荷" />
 
               </Elem>
               <Elem name='content-row'>
-                <Toggle 
-                  skip 
-                  checked={sendForAllActions} 
-                  label="Send for all actions" 
+                <Toggle
+                  skip
+                  checked={sendForAllActions}
+                  label="发送所有动作"
                   onChange={(e) => { setSendForAllActions(e.target.checked); }} />
               </Elem>
               <div >
                 {
                   !sendForAllActions ?
                     <Elem name='content-row-actions'>
-                      <Elem tag='h4' name='title' mod={{black:true}}>
-                        Send Payload for
+                      <Elem tag='h4' name='title' mod={{ black: true }}>
+                        发送有效载荷为
                       </Elem>
                       <Elem name='actions'>
                         {Object.entries(webhooksInfo).map(([key, value]) => {
                           return <Form.Row key={key} columnCount={1}>
                             <div>
-                              <Toggle 
-                                skip 
-                                name={key} 
-                                type='checkbox' 
-                                label={value.name} 
-                                onChange={onActionChange} 
+                              <Toggle
+                                skip
+                                name={key}
+                                type='checkbox'
+                                label={value.name}
+                                onChange={onActionChange}
                                 checked={actions.has(key)}></Toggle>
                             </div>
                           </Form.Row>;
@@ -230,34 +230,34 @@ const WebhookDetail = ({ webhook, webhooksInfo, fetchWebhooks, onBack, onSelectA
               webhook === null ?
                 null
                 :
-                <Button 
+                <Button
                   look="danger"
                   type='button'
                   className={rootClass.elem('delete-button')}
-                  onClick={()=> WebhookDeleteModal({ 
-                    onDelete: async ()=>{
-                      await api.callApi('deleteWebhook', {params:{pk:webhook.id}});
+                  onClick={() => WebhookDeleteModal({
+                    onDelete: async () => {
+                      await api.callApi('deleteWebhook', { params: { pk: webhook.id } });
                       onBack();
                       await fetchWebhooks();
                     },
                   })}>
-                Delete Webhook...
+                  删除回调...
                 </Button>
             }
             <div className={rootClass.elem('status')}>
               <Form.Indicator />
             </div>
-            <Button 
+            <Button
               type='button'
               className={rootClass.elem('cancel-button')}
               onClick={onBack}
-            >Cancel
+            >取消
             </Button>
-            <Button 
+            <Button
               primary
               className={rootClass.elem('save-button')}
             >
-              { webhook===null ? 'Add Webhook': 'Save' }
+              {webhook === null ? '添加回调' : '保存'}
             </Button>
           </Elem>
         </Form>

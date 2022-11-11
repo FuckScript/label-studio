@@ -62,10 +62,10 @@ export const PeopleList = ({ onSelect, selectedUser, defaultSelected }) => {
           {usersList ? (
             <Elem name="users">
               <Elem name="header">
-                <Elem name="column" mix="avatar"/>
-                <Elem name="column" mix="email">Email</Elem>
-                <Elem name="column" mix="name">Name</Elem>
-                <Elem name="column" mix="last-activity">Last Activity</Elem>
+                <Elem name="column" mix="avatar" />
+                <Elem name="column" mix="email">邮箱</Elem>
+                <Elem name="column" mix="name">姓名</Elem>
+                <Elem name="column" mix="last-activity">最近访问</Elem>
               </Elem>
               <Elem name="body">
                 {usersList.map(({ user }) => {
@@ -75,7 +75,7 @@ export const PeopleList = ({ onSelect, selectedUser, defaultSelected }) => {
                     <Elem key={`user-${user.id}`} name="user" mod={{ active }} onClick={() => selectUser(user)}>
                       <Elem name="field" mix="avatar">
                         <CopyableTooltip title={'User ID: ' + user.id} textForCopy={user.id}>
-                          <Userpic user={user} style={{ width: 28, height: 28 }}/>
+                          <Userpic user={user} style={{ width: 28, height: 28 }} />
                         </CopyableTooltip>
                       </Elem>
                       <Elem name="field" mix="email">
@@ -94,7 +94,7 @@ export const PeopleList = ({ onSelect, selectedUser, defaultSelected }) => {
             </Elem>
           ) : (
             <Elem name="loading">
-              <Spinner size={36}/>
+              <Spinner size={36} />
             </Elem>
           )}
         </Elem>

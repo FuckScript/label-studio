@@ -72,7 +72,7 @@ export const Preview = ({ config, data, error, loading }) => {
         // there is can be weird error from LSF, but we can just skip it for now
         try {
           lsf.current.destroy();
-        } catch(e) {}
+        } catch (e) { }
         lsf.current = null;
       }
     };
@@ -104,7 +104,7 @@ export const Preview = ({ config, data, error, loading }) => {
 
   return (
     <div className={configClass.elem("preview")}>
-      <h3>UI Preview</h3>
+      <h3>UI 预览</h3>
       {error && (
         <div className={configClass.elem("preview-error")}>
           <h2>{error.detail} {error.id}</h2>

@@ -1,4 +1,4 @@
-title: Response Selection
+title: 反应选择
 type: community
 group: Conversational AI
 image: /static/templates/response-selection.png
@@ -22,4 +22,3 @@ config: |
       </View>
     </View>
   </View>
-

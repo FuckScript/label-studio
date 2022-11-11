@@ -22,7 +22,7 @@ const downloadFile = (blob, filename) => {
   link.click();
 };
 
-const {Block, Elem} = BemWithSpecifiContext();
+const { Block, Elem } = BemWithSpecifiContext();
 
 const wait = () => new Promise(resolve => setTimeout(resolve, 5000));
 
@@ -79,7 +79,7 @@ export const ExportPage = () => {
         params: {
           pk: pageParams.id,
         },
-      }).then(({export_files}) => {
+      }).then(({ export_files }) => {
         setPreviousExports(export_files.slice(0, 1));
       });
 
@@ -146,8 +146,8 @@ export const ExportPage = () => {
         const search = location.search;
         history.replace(`${path}${search !== '?' ? search : ''}`);
       }}
-      title="Export data"
-      style={{width: 720}}
+      title="导出数据"
+      style={{ width: 720 }}
       closeOnClickOutside={false}
       allowClose={!downloading}
       // footer="Read more about supported export formats in the Documentation."
@@ -161,7 +161,7 @@ export const ExportPage = () => {
         />
 
         <Form ref={form}>
-          <Input type="hidden" name="exportType" value={currentFormat}/>
+          <Input type="hidden" name="exportType" value={currentFormat} />
 
           {/* {aggregation} */}
 
@@ -173,7 +173,7 @@ export const ExportPage = () => {
         </Form>
 
         <Elem name="footer">
-          <Space style={{width: '100%'}} spread>
+          <Space style={{ width: '100%' }} spread>
             <Elem name="recent">
               {/* {exportHistory} */}
             </Elem>
@@ -189,7 +189,7 @@ export const ExportPage = () => {
                   onClick={proceedExport}
                   waiting={downloading}
                 >
-                  Export
+                  导出
                 </Elem>
               </Space>
             </Elem>
@@ -200,10 +200,10 @@ export const ExportPage = () => {
   );
 };
 
-const FormatInfo = ({availableFormats, selected, onClick}) => {
+const FormatInfo = ({ availableFormats, selected, onClick }) => {
   return (
     <Block name="formats">
-      <Elem name="info">You can export dataset in one of the following formats:</Elem>
+      <Elem name="info">您可以以以下格式之一导出数据集:</Elem>
       <Elem name="list">
         {availableFormats.map(format => (
           <Elem
@@ -230,9 +230,9 @@ const FormatInfo = ({availableFormats, selected, onClick}) => {
         ))}
       </Elem>
       <Elem name="feedback">
-        Can't find an export format?
-        <br/>
-        Please let us know in <a className="no-go" href="https://slack.labelstudio.heartex.com/?source=product-export">Slack</a> or submit an issue to the <a className="no-go" href="https://github.com/heartexlabs/label-studio-converter/issues">Repository</a>
+        找不到导出格式?
+        <br />
+        请让我们知道 <a className="no-go" href="https://slack.labelstudio.heartex.com/?source=product-export">Slack</a> 或提交问题到 <a className="no-go" href="https://github.com/heartexlabs/label-studio-converter/issues">库</a>
       </Elem>
     </Block>
   );

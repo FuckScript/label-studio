@@ -5,7 +5,7 @@ import { Button, Userpic } from "../../../components";
 import { Block, Elem } from "../../../utils/bem";
 import "./SelectedUser.styl";
 
-const UserProjectsLinks = ({projects}) => {
+const UserProjectsLinks = ({ projects }) => {
   return (
     <Elem name="links-list">
       {projects.map((project) => (
@@ -22,12 +22,12 @@ export const SelectedUser = ({ user, onClose }) => {
 
   return (
     <Block name="user-info">
-      <Elem name="close" tag={Button} type="link" onClick={onClose}><LsCross/></Elem>
+      <Elem name="close" tag={Button} type="link" onClick={onClose}><LsCross /></Elem>
 
       <Elem name="header">
         <Userpic
           user={user}
-          style={{width: 64, height: 64, fontSize: 28}}
+          style={{ width: 64, height: 64, fontSize: 28 }}
         />
 
         {fullName && (
@@ -45,9 +45,9 @@ export const SelectedUser = ({ user, onClose }) => {
 
       {!!user.created_projects.length && (
         <Elem name="section">
-          <Elem name="section-title">Created Projects</Elem>
+          <Elem name="section-title">创建项目</Elem>
 
-          <UserProjectsLinks projects={user.created_projects}/>
+          <UserProjectsLinks projects={user.created_projects} />
         </Elem>
       )}
 
@@ -55,12 +55,12 @@ export const SelectedUser = ({ user, onClose }) => {
         <Elem name="section">
           <Elem name="section-title">Contributed to</Elem>
 
-          <UserProjectsLinks projects={user.contributed_to_projects}/>
+          <UserProjectsLinks projects={user.contributed_to_projects} />
         </Elem>
       )}
 
       <Elem tag="p" name="last-active">
-        Last activity on: {format(new Date(user.last_activity), 'dd MMM yyyy, KK:mm a')}
+        最近一次访问在: {format(new Date(user.last_activity), 'dd MMM yyyy, KK:mm a')}
       </Elem>
     </Block>
   );

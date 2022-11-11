@@ -1,4 +1,4 @@
-title: Video Timeline Segmentation
+title: 视频时间分割
 type: community
 group: Videos
 image: /static/templates/video-timeline-segmentation.png
@@ -22,4 +22,3 @@ config: |
   <!--{
    "video_url": "/static/samples/opossum_snow.mp4"
   }-->
-

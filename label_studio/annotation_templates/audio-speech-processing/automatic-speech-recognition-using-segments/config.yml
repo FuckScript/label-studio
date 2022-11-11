@@ -1,4 +1,4 @@
-title: Automatic Speech Recognition using Segments
+title: 使用分段的自动语音识别
 type: community
 group: Audio/Speech Processing
 image: /static/templates/automatic-speech-recognition-using-segments.png
@@ -16,5 +16,3 @@ config: |
               rows="2" editable="true"
               perRegion="true" required="true" />
   </View>
-
-

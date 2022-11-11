@@ -9,7 +9,7 @@ import { useAPI } from "../../providers/ApiProvider";
 import { useProject } from "../../providers/ProjectProvider";
 
 export const DangerZone = () => {
-  const {project} = useProject();
+  const { project } = useProject();
   const api = useAPI();
   const history = useHistory();
   const [processing, setProcessing] = useState(null);
@@ -22,19 +22,19 @@ export const DangerZone = () => {
       buttonLook: "destructive",
       onOk: async () => {
         setProcessing(type);
-        if(type === 'annotations') {
+        if (type === 'annotations') {
           // console.log('delete annotations');
-        } else if(type === 'tasks') {
+        } else if (type === 'tasks') {
           // console.log('delete tasks');
-        } else if(type === 'predictions') {
+        } else if (type === 'predictions') {
           // console.log('delete predictions');
-        } else if(type === 'tabs') {
+        } else if (type === 'tabs') {
           await api.callApi('deleteTabs', {
             body: {
               project: project.id,
             },
           });
-        } else if(type === 'project') {
+        } else if (type === 'project') {
           await api.callApi('deleteProject', {
             params: {
               pk: project.id,
@@ -50,33 +50,33 @@ export const DangerZone = () => {
   const buttons = useMemo(() => [{
     type: 'annotations',
     disabled: true, //&& !project.total_annotations_number,
-    label: `Delete ${project.total_annotations_number} Annotations`,
+    label: `删除 ${project.total_annotations_number} 标注`,
   }, {
     type: 'tasks',
     disabled: true, //&& !project.task_number,
-    label: `Delete ${project.task_number} Tasks`,
+    label: `删除 ${project.task_number} Tasks`,
   }, {
     type: 'predictions',
     disabled: true, //&& !project.total_predictions_number,
-    label: `Delete ${project.total_predictions_number} Predictions`,
+    label: `删除 ${project.total_predictions_number} 预测`,
   }, {
     type: 'tabs',
-    label: `Drop All Tabs`,
+    label: `删除所有标签`,
   }, {
     type: 'project',
-    label: 'Delete Project',
+    label: '删除项目',
   }], [project]);
 
   return (
-    <div style={{width: 480}}>
+    <div style={{ width: 480 }}>
       <Label
-        text="Delete Annotations, Tasks, or Project"
-        description="Perform these actions at your own risk. Actions you take on this page can't be reverted. Make sure your data is backed up."
-        style={{display: 'block', width: 415}}
+        text="删除标注、任务或项目"
+        description="执行这些操作需自负风险。您在此页上所做的操作无法恢复。确保你的数据已经备份。"
+        style={{ display: 'block', width: 415 }}
       />
 
       {project.id ? (
-        <Space direction="vertical" spread style={{marginTop: 32}}>
+        <Space direction="vertical" spread style={{ marginTop: 32 }}>
           {buttons.map((btn) => {
             const waiting = processing === btn.type;
             const disabled = btn.disabled || (processing && !waiting);
@@ -88,13 +88,13 @@ export const DangerZone = () => {
           })}
         </Space>
       ) : (
-        <div style={{display: "flex", justifyContent: "center", marginTop: 32}}>
-          <Spinner size={32}/>
+        <div style={{ display: "flex", justifyContent: "center", marginTop: 32 }}>
+          <Spinner size={32} />
         </div>
       )}
     </div>
   );
 };
 
-DangerZone.title = "Danger Zone";
+DangerZone.title = "删除操作";
 DangerZone.path = "/danger-zone";

@@ -16,7 +16,7 @@ export const Inner = () => {
   const location = useFixedLocation();
   const modal = useRef();
   const refresh = useRefresh();
-  const {project} = useProject();
+  const { project } = useProject();
   const [waiting, setWaitingStatus] = useState(false);
   const api = useAPI();
 
@@ -26,7 +26,7 @@ export const Inner = () => {
     const path = location.pathname.replace(ImportModal.path, '');
     const search = location.search;
     const pathname = `${path}${search !== '?' ? search : ''}`;
-
+    console.log(refresh(pathname));
     return refresh(pathname);
   }, [location, history]);
 
@@ -62,12 +62,12 @@ export const Inner = () => {
       bare
     >
       <Modal.Header divided>
-        <Elem block="modal" name="title">Import Data</Elem>
+        <Elem block="modal" name="title">导入数据</Elem>
 
         <Space>
-          <Button waiting={waiting} onClick={onCancel}>Cancel</Button>
+          <Button waiting={waiting} onClick={onCancel}>取消</Button>
           <Button look="primary" onClick={onFinish} waiting={waiting || uploading} disabled={uploadDisabled}>
-            Import
+            导入
           </Button>
         </Space>
       </Modal.Header>

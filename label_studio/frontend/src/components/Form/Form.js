@@ -517,7 +517,7 @@ Form.Builder = React.forwardRef(({
             look="primary"
             style={{ width: 120 }}
           >
-            Save
+            保存
           </Button>
         </Form.Actions>
       )}

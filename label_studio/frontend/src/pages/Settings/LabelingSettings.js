@@ -8,7 +8,7 @@ import { ConfigPage } from '../CreateProject/Config/Config';
 
 export const LabelingSettings = () => {
   const history = useHistory();
-  const {project, fetchProject} = useProject();
+  const { project, fetchProject } = useProject();
   const [config, setConfig] = useState("");
   const [essentialDataChanged, setEssentialDataChanged] = useState(false);
   const api = useAPI();
@@ -39,7 +39,7 @@ export const LabelingSettings = () => {
       const configIsEmpty = project.label_config.replace(/\s/g, '') === '<View></View>';
       const hasTasks = project.task_number > 0;
 
-      console.log({hasConfig, configIsEmpty, hasTasks, project});
+      console.log({ hasConfig, configIsEmpty, hasTasks, project });
       return (hasConfig && !configIsEmpty) && hasTasks;
     }
     return false;
@@ -48,11 +48,11 @@ export const LabelingSettings = () => {
   const onSave = useCallback(async () => {
     if (essentialDataChanged && projectAlreadySetUp) {
       confirm({
-        title: "Config data changed",
-        body: "Labeling config has essential changes that affect data displaying. Saving the config may lead to deleting all tabs previously created in the Data Manager.",
+        title: "配置数据发生了变化",
+        body: "标记配置具有影响数据显示的基本变化。保存配置可能会导致删除之前在Data Manager中创建的所有选项卡。",
         buttonLook: "destructive",
         onOk: () => saveConfig(),
-        okText: "Save",
+        okText: "保存",
       });
     } else {
       saveConfig();
@@ -81,5 +81,5 @@ export const LabelingSettings = () => {
   );
 };
 
-LabelingSettings.title = "Labeling Interface";
+LabelingSettings.title = "标注设置";
 LabelingSettings.path = "/labeling";

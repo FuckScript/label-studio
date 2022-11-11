@@ -107,7 +107,7 @@ export const StorageForm = forwardRef(({
           <Button type="button" waiting={checking} onClick={validateStorageConnection}>
             Check Connection
           </Button>
-          <Button type="submit" look="primary">{storage ? "Save" : "Add Storage"}</Button>
+          <Button type="submit" look="primary">{storage ? "保存" : "添加存储"}</Button>
         </Button.Group>
       </Form.Actions>
 

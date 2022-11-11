@@ -17,7 +17,7 @@ const WebhookList = ({ onSelectActive, onAddWebhook, webhooks, fetchWebhooks }) 
 
   if (webhooks === null) return <></>;
 
-  const onActiveChange = useCallback( async (event) => {
+  const onActiveChange = useCallback(async (event) => {
     let value = event.target.checked;
     await api.callApi('updateWebhook', {
       params: {
@@ -33,11 +33,11 @@ const WebhookList = ({ onSelectActive, onAddWebhook, webhooks, fetchWebhooks }) 
   return <Block name='webhook'>
     <Elem name='controls'>
       <Button onClick={onAddWebhook}>
-        Add Webhook
+        添加回调
       </Button>
     </Elem>
     <Elem>
-      {webhooks.length === 0? 
+      {webhooks.length === 0 ?
         null
         :
         <Block name='webhook-list'>
@@ -48,7 +48,7 @@ const WebhookList = ({ onSelectActive, onAddWebhook, webhooks, fetchWebhooks }) 
                   <Toggle
                     name={obj.id}
                     checked={obj.is_active}
-                    onChange={onActiveChange} 
+                    onChange={onActiveChange}
                   />
                 </Elem>
                 <Elem name='item-url' onClick={() => onSelectActive(obj.id)}>
@@ -63,15 +63,15 @@ const WebhookList = ({ onSelectActive, onAddWebhook, webhooks, fetchWebhooks }) 
                     icon={<LsPencil />}
                   >Edit</Button>
                   <Button
-                    onClick={()=> WebhookDeleteModal({ 
-                      onDelete: async ()=>{
-                        await api.callApi('deleteWebhook', {params:{pk:obj.id}});
+                    onClick={() => WebhookDeleteModal({
+                      onDelete: async () => {
+                        await api.callApi('deleteWebhook', { params: { pk: obj.id } });
                         await fetchWebhooks();
                       },
                     })}
                     look='danger'
                     icon={<LsCross />}
-                  >Delete</Button>
+                  >删除</Button>
                 </Elem>
               </Elem>,
             )

@@ -22,17 +22,17 @@ const Webhook = () => {
 
   const api = useAPI();
   const { project } = useProject();
-  
-  
 
-  const projectId = useMemo(()=>{
-    if (history.location.pathname.startsWith('/projects')){
+
+
+  const projectId = useMemo(() => {
+    if (history.location.pathname.startsWith('/projects')) {
       if (Object.keys(project).length === 0) {
         return null;
-      }else{
+      } else {
         return project.id;
       }
-    }else{
+    } else {
       return undefined;
     }
   }, [project, history]);
@@ -43,7 +43,7 @@ const Webhook = () => {
       return;
     }
     let params = {};
-    if (projectId !== undefined){
+    if (projectId !== undefined) {
       params['project'] = projectId;
     } else {
       params['project'] = null;
@@ -60,7 +60,7 @@ const Webhook = () => {
       return;
     }
     let params = {};
-    if (projectId !== undefined){
+    if (projectId !== undefined) {
       params['organization-only'] = false;
     }
 
@@ -81,19 +81,19 @@ const Webhook = () => {
     return null;
   }
   let content = null;
-  if (activeWebhook==='new') {
+  if (activeWebhook === 'new') {
     content = <WebhookDetail
       onSelectActive={setActiveWebhook}
       onBack={() => setActiveWebhook(null)}
       webhook={null}
       fetchWebhooks={fetchWebhooks}
-      webhooksInfo={webhooksInfo} />;  
+      webhooksInfo={webhooksInfo} />;
   } else if (activeWebhook === null) {
     content = <WebhookList
       onSelectActive={setActiveWebhook}
-      onAddWebhook={()=>{setActiveWebhook('new');}}
+      onAddWebhook={() => { setActiveWebhook('new'); }}
       fetchWebhooks={fetchWebhooks}
-      webhooks={webhooks}       
+      webhooks={webhooks}
     />;
   } else {
     content = <WebhookDetail
@@ -107,15 +107,15 @@ const Webhook = () => {
     {content}
     <Elem name="footer">
       <Elem name='footer-icon'>
-        <IconInfo width='28' height='28'/>
+        <IconInfo width='28' height='28' />
       </Elem>
       <Elem name='footer-text'>
         <p>
-        Webhooks allow external services to be notified when certain events happen. 
-        When the specified events occur, a POST request is sent to each of the URLs you provide. 
+          Webhooks允许在某些事件发生时通知外部服务。
+          当指定的事件发生时，将向您提供的每个url发送一个POST请求。
         </p>
         <p>
-          <a href="https://labelstud.io/guide/webhooks.html">Read more in the documentation</a>.
+          <a href="https://labelstud.io/guide/webhooks.html">阅读更多文档</a>.
         </p>
       </Elem>
     </Elem>
@@ -123,7 +123,7 @@ const Webhook = () => {
 };
 
 export const WebhookPage = {
-  title: "Webhooks",
+  title: "回调",
   path: "/webhooks",
   component: Webhook,
 };

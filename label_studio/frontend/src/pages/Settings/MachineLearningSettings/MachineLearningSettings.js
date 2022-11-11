@@ -78,15 +78,15 @@ export const MachineLearningSettings = () => {
             }
           }}
         >
-          <Input type="hidden" name="project" value={project.id}/>
+          <Input type="hidden" name="project" value={project.id} />
 
           <Form.Row columnCount={2}>
-            <Input name="title" label="Title" placeholder="ML Model"/>
-            <Input name="url" label="URL" required/>
+            <Input name="title" label="Title" placeholder="ML Model" />
+            <Input name="url" label="URL" required />
           </Form.Row>
 
           <Form.Row columnCount={1}>
-            <TextArea name="description" label="Description" style={{ minHeight: 120 }}/>
+            <TextArea name="description" label="Description" style={{ minHeight: 120 }} />
           </Form.Row>
 
           <Form.Row columnCount={1}>
@@ -98,7 +98,7 @@ export const MachineLearningSettings = () => {
 
           <Form.Actions>
             <Button type="submit" look="primary" onClick={() => setMLError(null)}>
-              Validate and Save
+              验证并保存
             </Button>
           </Form.Actions>
 
@@ -110,12 +110,12 @@ export const MachineLearningSettings = () => {
                     detail: `Failed to ${backend ? 'save' : 'add new'} ML backend.`,
                     exc_info: response.error_message,
                   },
-                }}/>
+                }} />
               )}
             </>
           )}</Form.ResponseParser>
 
-          <InlineError/>
+          <InlineError />
         </Form>
       ),
     };
@@ -133,18 +133,18 @@ export const MachineLearningSettings = () => {
   return (
     <>
       <Description style={{ marginTop: 0, maxWidth: 680 }}>
-        Add one or more machine learning models to predict labels for your data.
-        To import predictions without connecting a model,
+        添加一个或多个机器学习模型来预测数据的标签。
+        要在不连接模型的情况下导入预测，
         {" "}
         <a href="https://labelstud.io/guide/predictions.html" target="_blank">
-          see the documentation
+          看文档
         </a>.
       </Description>
       <Button onClick={() => showMLFormModal()}>
-        Add Model
+        添加模型
       </Button>
 
-      <Divider height={32}/>
+      <Divider height={32} />
 
       <Form action="updateProject"
         formData={{ ...project }}
@@ -153,25 +153,25 @@ export const MachineLearningSettings = () => {
         autosubmit
       >
         <Form.Row columnCount={1}>
-          <Label text="ML-Assisted Labeling" large/>
+          <Label text="ML-Assisted标签" large />
 
           <div style={{ paddingLeft: 16 }}>
             <Toggle
-              label="Start model training after any annotations are submitted or updated"
+              label="在提交或更新任何注释后开始模型训练"
               name="start_training_on_annotation_update"
             />
           </div>
 
           <div style={{ paddingLeft: 16 }}>
             <Toggle
-              label="Retrieve predictions when loading a task automatically"
+              label="自动加载任务时检索预测结果"
               name="evaluate_predictions_automatically"
             />
           </div>
 
           <div style={{ paddingLeft: 16 }}>
             <Toggle
-              label="Show predictions to annotators in the Label Stream and Quick View"
+              label="在标签流和快速视图中向标注者显示预测"
               name="show_collab_predictions"
             />
           </div>
@@ -180,8 +180,8 @@ export const MachineLearningSettings = () => {
         {versions.length > 1 && (
           <Form.Row columnCount={1}>
             <Label
-              text="Model Version"
-              description="Model version allows you to specify which prediction will be shown to the annotators."
+              text="模型版本"
+              description="模型版本允许您指定将向注释器显示哪个预测。"
               style={{ marginTop: 16 }}
               large
             />
@@ -194,12 +194,12 @@ export const MachineLearningSettings = () => {
                   options={[
                     ...versions,
                   ]}
-                  placeholder="No model version selected"
+                  placeholder="未选择模型版本"
                 />
               </div>
 
               <Button onClick={resetMLVersion}>
-                Reset
+                重置
               </Button>
             </div>
 
@@ -216,5 +216,5 @@ export const MachineLearningSettings = () => {
   );
 };
 
-MachineLearningSettings.title = "Machine Learning";
+MachineLearningSettings.title = "机器学习";
 MachineLearningSettings.path = "/ml";

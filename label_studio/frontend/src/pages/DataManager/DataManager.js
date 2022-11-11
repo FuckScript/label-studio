@@ -162,7 +162,7 @@ export const DataManagerPage = ({ ...props }) => {
         alignItems: 'center',
         justifyContent: 'center',
       }}>
-        <Spinner size={64}/>
+        <Spinner size={64} />
       </div>
     );
   }
@@ -176,7 +176,7 @@ export const DataManagerPage = ({ ...props }) => {
       </Button>
     </Block>
   ) : (
-    <Block ref={root} name="datamanager"/>
+    <Block ref={root} name="datamanager" />
   );
 };
 
@@ -191,7 +191,7 @@ DataManagerPage.context = ({ dmRef }) => {
   const [mode, setMode] = useState(dmRef?.mode ?? "explorer");
 
   const links = {
-    '/settings': 'Settings',
+    '/settings': '设置',
   };
 
   const updateCrumbs = (currentMode) => {
@@ -220,8 +220,8 @@ DataManagerPage.context = ({ dmRef }) => {
 
     if (isLabelStream && show_instruction && expert_instruction) {
       modal({
-        title: "Labeling Instructions",
-        body: <div dangerouslySetInnerHTML={{ __html: expert_instruction }}/>,
+        title: "标签说明",
+        body: <div dangerouslySetInnerHTML={{ __html: expert_instruction }} />,
         style: { width: 680 },
       });
     }
@@ -249,7 +249,7 @@ DataManagerPage.context = ({ dmRef }) => {
         <Button size="compact" onClick={() => {
           modal({
             title: "Instructions",
-            body: () => <div dangerouslySetInnerHTML={{ __html: project.expert_instruction }}/>,
+            body: () => <div dangerouslySetInnerHTML={{ __html: project.expert_instruction }} />,
           });
         }}>
           Instructions

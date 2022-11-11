@@ -82,7 +82,7 @@ const Upload = ({ children, sendFiles }) => {
       onDragOver={onHover}
       onDragLeave={onLeave}
       onDrop={onDrop}
-      // {...getRootProps}
+    // {...getRootProps}
     >
       {children}
     </div>
@@ -126,13 +126,13 @@ export const ImportPage = ({
 
   const processFiles = (state, action) => {
     if (action.sending) {
-      return {...state, uploading: [...action.sending, ...state.uploading]};
+      return { ...state, uploading: [...action.sending, ...state.uploading] };
     }
     if (action.sent) {
-      return {...state, uploading: state.uploading.filter(f => !action.sent.includes(f))};
+      return { ...state, uploading: state.uploading.filter(f => !action.sent.includes(f)) };
     }
     if (action.uploaded) {
-      return {...state, uploaded: unique([...state.uploaded, ...action.uploaded], (a, b) => a.id === b.id)};
+      return { ...state, uploaded: unique([...state.uploaded, ...action.uploaded], (a, b) => a.id === b.id) };
     }
     // if (action.ids) {
     //   const ids = unique([...state.ids, ...action.ids]);
@@ -141,7 +141,7 @@ export const ImportPage = ({
     // }
     return state;
   };
-  const [files, dispatch] = useReducer(processFiles, {uploaded: [], uploading: []});
+  const [files, dispatch] = useReducer(processFiles, { uploaded: [], uploading: [] });
   const showList = Boolean(files.uploaded?.length || files.uploading?.length);
 
   const setIds = (ids) => {
@@ -266,27 +266,27 @@ export const ImportPage = ({
 
   return (
     <div className={importClass}>
-      {highlightCsvHandling && <div className={importClass.elem("csv-splash")}/>}
-      <input id="file-input" type="file" name="file" multiple onChange={onUpload} style={{ display: "none" }}/>
+      {highlightCsvHandling && <div className={importClass.elem("csv-splash")} />}
+      <input id="file-input" type="file" name="file" multiple onChange={onUpload} style={{ display: "none" }} />
 
       <header>
         <form className={importClass.elem("url-form") + " inline"} method="POST" onSubmit={onLoadURL}>
-          <input placeholder="Dataset URL" name="url" ref={urlRef} />
-          <button type="submit">Add URL</button>
+          <input placeholder="数据源地址" name="url" ref={urlRef} />
+          <button type="submit">添加地址</button>
         </form>
         <span>or</span>
         <button onClick={() => document.getElementById('file-input').click()} className={importClass.elem("upload-button")}>
           <IconUpload width="16" height="16" className={importClass.elem("upload-icon")} />
-          Upload {files.uploaded.length ? "More " : ""}Files
+          上传 {files.uploaded.length ? "更多 " : ""}文件
         </button>
         <div className={importClass.elem("csv-handling").mod({ highlighted: highlightCsvHandling, hidden: !csvHandling })}>
           <span>Treat CSV/TSV as</span>
-          <label><input {...csvProps} value="tasks" checked={csvHandling === "tasks"}/> List of tasks</label>
-          <label><input {...csvProps} value="ts" checked={csvHandling === "ts"}/> Time Series</label>
+          <label><input {...csvProps} value="tasks" checked={csvHandling === "tasks"} /> 任务列表</label>
+          <label><input {...csvProps} value="ts" checked={csvHandling === "ts"} /> 时间序列</label>
         </div>
         <div className={importClass.elem("status")}>
           {files.uploaded.length
-            ? `${files.uploaded.length} files uploaded`
+            ? `${files.uploaded.length} 文件已上传`
             : ""}
         </div>
       </header>
@@ -298,7 +298,7 @@ export const ImportPage = ({
           {!showList && (
             <label htmlFor="file-input">
               <div className={dropzoneClass.elem("content")}>
-                <header>Drag & drop files here<br/>or click to browse</header>
+                <header>拖拽文件至此处<br />或点击浏览</header>
                 <IconUpload height="64" className={dropzoneClass.elem("icon")} />
                 <dl>
                   <dt>Text</dt><dd>txt</dd>

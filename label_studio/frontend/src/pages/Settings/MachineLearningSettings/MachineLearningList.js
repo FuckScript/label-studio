@@ -46,33 +46,33 @@ export const MachineLearningList = ({ backends, fetchBackends, onEdit }) => {
   );
 };
 
-const BackendCard = ({backend, onStartTrain, onEdit, onDelete}) => {
+const BackendCard = ({ backend, onStartTrain, onEdit, onDelete }) => {
   const confirmDelete = useCallback((backend) => {
     confirm({
       title: "Delete ML Backend",
       body: "This action cannot be undone. Are you sure?",
       buttonLook: "destructive",
-      onOk(){ onDelete?.(backend); },
+      onOk() { onDelete?.(backend); },
     });
   }, [backend, onDelete]);
 
   return (
-    <Card style={{marginTop: 0}} header={backend.title} extra={(
+    <Card style={{ marginTop: 0 }} header={backend.title} extra={(
       <div className={cn('ml').elem('info')}>
-        <BackendState backend={backend}/>
+        <BackendState backend={backend} />
 
         <Dropdown.Trigger align="right" content={(
           <Menu size="small">
-            <Menu.Item onClick={() => onEdit(backend)}>Edit</Menu.Item>
-            <Menu.Item onClick={() => confirmDelete(backend)}>Delete</Menu.Item>
+            <Menu.Item onClick={() => onEdit(backend)}>编辑</Menu.Item>
+            <Menu.Item onClick={() => confirmDelete(backend)}>删除</Menu.Item>
           </Menu>
         )}>
-          <Button type="link" icon={<FaEllipsisV/>}/>
+          <Button type="link" icon={<FaEllipsisV />} />
         </Dropdown.Trigger>
       </div>
     )}>
       <DescriptionList className={cn('ml').elem('summary')}>
-        <DescriptionList.Item term="URL" termStyle={{whiteSpace: 'nowrap'}}>
+        <DescriptionList.Item term="URL" termStyle={{ whiteSpace: 'nowrap' }}>
           {truncate(backend.url, 20, 10, '...')}
         </DescriptionList.Item>
         {backend.description && (
@@ -87,17 +87,17 @@ const BackendCard = ({backend, onStartTrain, onEdit, onDelete}) => {
       </DescriptionList>
 
       <Button disabled={backend.state !== "CO"} onClick={() => onStartTrain(backend)}>
-        Start Training
+        开始训练
       </Button>
     </Card>
   );
 };
 
-const BackendState = ({backend}) => {
+const BackendState = ({ backend }) => {
   const { state } = backend;
   return (
     <div className={cn('ml').elem('status')}>
-      <span className={cn('ml').elem('indicator').mod({state})}></span>
+      <span className={cn('ml').elem('indicator').mod({ state })}></span>
       <Oneof value={state} className={cn('ml').elem('status-label')}>
         <span case="DI">Disconnected</span>
         <span case="CO">Connected</span>

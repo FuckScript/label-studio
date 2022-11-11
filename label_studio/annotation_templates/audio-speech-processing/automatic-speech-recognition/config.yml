@@ -1,4 +1,4 @@
-title: Automatic Speech Recognition
+title: 自动语音识别
 type: community
 group: Audio/Speech Processing
 image: /static/templates/automatic-speech-recognition.png
@@ -10,4 +10,3 @@ config: |
     <TextArea name="transcription" toName="audio"
               rows="4" editable="true" maxSubmissions="1" />
   </View>
-

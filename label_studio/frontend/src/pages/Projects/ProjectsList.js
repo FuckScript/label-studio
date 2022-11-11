@@ -12,7 +12,7 @@ export const ProjectsList = ({ projects, currentPage, totalItems, loadNextPage, 
     <>
       <Elem name="list">
         {projects.map(project => (
-          <ProjectCard key={project.id} project={project}/>
+          <ProjectCard key={project.id} project={project} />
         ))}
       </Elem>
       <Elem name="pages">
@@ -35,9 +35,9 @@ export const EmptyProjectsList = ({ openModal }) => {
   return (
     <Block name="empty-projects-page">
       <Elem name="heidi" tag="img" src={absoluteURL("/static/images/opossum_looking.png")} />
-      <Elem name="header" tag="h1">Heidi doesn’t see any projects here</Elem>
-      <p>Create one and start labeling your data</p>
-      <Elem name="action" tag={Button} onClick={openModal} look="primary">Create Project</Elem>
+      {/* <Elem name="header" tag="h1">Heidi doesn’t see any projects here</Elem> */}
+      <p>创建一个并开始标记你的数据</p>
+      <Elem name="action" tag={Button} onClick={openModal} look="primary">创建项目</Elem>
     </Block>
   );
 };
@@ -69,11 +69,11 @@ const ProjectCard = ({ project }) => {
             }}>
               <Dropdown.Trigger content={(
                 <Menu>
-                  <Menu.Item href={`/projects/${project.id}/settings`}>Settings</Menu.Item>
-                  <Menu.Item href={`/projects/${project.id}/data?labeling=1`}>Label</Menu.Item>
+                  <Menu.Item href={`/projects/${project.id}/settings`}>设置</Menu.Item>
+                  <Menu.Item href={`/projects/${project.id}/data?labeling=1`}>标注</Menu.Item>
                 </Menu>
               )}>
-                <Button size="small" type="text" icon={<LsEllipsis/>}/>
+                <Button size="small" type="text" icon={<LsEllipsis />} />
               </Dropdown.Trigger>
             </Elem>
           </Elem>
@@ -84,15 +84,15 @@ const ProjectCard = ({ project }) => {
               </Elem>
               <Elem name="detail">
                 <Elem name="detail-item" mod={{ type: "completed" }}>
-                  <Elem tag={LsCheck} name="icon"/>
+                  <Elem tag={LsCheck} name="icon" />
                   {project.total_annotations_number}
                 </Elem>
                 <Elem name="detail-item" mod={{ type: "rejected" }}>
-                  <Elem tag={LsMinus} name="icon"/>
+                  <Elem tag={LsMinus} name="icon" />
                   {project.skipped_annotations_number}
                 </Elem>
                 <Elem name="detail-item" mod={{ type: "predictions" }}>
-                  <Elem tag={LsBulb} name="icon"/>
+                  <Elem tag={LsBulb} name="icon" />
                   {project.total_predictions_number}
                 </Elem>
               </Elem>
@@ -107,7 +107,7 @@ const ProjectCard = ({ project }) => {
             {format(new Date(project.created_at), "dd MMM ’yy, HH:mm")}
           </Elem>
           <Elem name="created-by">
-            <Userpic src="#" user={project.created_by} showUsername/>
+            <Userpic src="#" user={project.created_by} showUsername />
           </Elem>
         </Elem>
       </Block>
